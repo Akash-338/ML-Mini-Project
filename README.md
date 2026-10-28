@@ -33,7 +33,7 @@ py -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
-Open http://127.0.0.1:8000. Replace `.venv` with `.venv-new` if that is your environment. Dependencies are unpinned; saved scikit-learn models may not load across different versions. Only load trusted joblib artifacts.
+Open http://127.0.0.1:8000. Replace `.venv` with `.venv-new` if that is your environment. The direct dependencies are pinned to the versions used for the saved model (Python 3.13.14); other Python versions may require compatible wheels. Saved scikit-learn models may not load across different versions. Only load trusted joblib artifacts.
 
 To audit the data or retrain the model:
 
@@ -55,3 +55,9 @@ The first command overwrites `results/data_audit.json`. The second overwrites th
 - `tests/`: detector and application tests.
 
 Further work includes evaluating across grouped splits and seeds, analyzing rare attacks, calibrating scores, and testing on independent, current network data.
+
+## Additional checks
+
+`python -m src.development_comparison` compares boosted, weighted boosted and logistic models on two group-aware development splits, without reading the test file. Threshold and metrics share the validation partition, so those scores are optimistic; the results do not establish improvement on independent data. `python -m src.overlap_diagnostics` evaluates the existing model on previously inspected test rows with and without feature overlap. Its output is exploratory, not an independent test.
+
+The app validates nonnegative numeric values, integer counts, indicator flags and rate ranges. It displays test accuracy only when the model hash matches the report. Attack scores are not calibrated probabilities. The code and model do not provide attack-type classification, live network feature extraction or unknown-attack identification.

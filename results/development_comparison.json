@@ -1,0 +1,647 @@
+{
+  "description": "Development-only comparison; threshold and metrics share the validation split, and this is not an independent evaluation. Test data was not read. Rare class estimates are unreliable.",
+  "runs": [
+    {
+      "split_seed": 42,
+      "model": "boosted",
+      "threshold": 0.010878611369230334,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 13085,
+        "false_alarms": 383,
+        "missed_attacks": 1,
+        "detected_attacks": 11726,
+        "accuracy": 0.9847588807303036,
+        "false_positive_rate": 0.02843777843777844,
+        "attack_recall": 0.9999147266990706,
+        "attack_precision": 0.9683706334131638,
+        "roc_auc": 0.999977383707238,
+        "average_precision": 0.9999740327503377
+      },
+      "per_attack": {
+        "back": {
+          "support": 192,
+          "recall": 1.0
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 1.0
+        },
+        "ftp_write": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 1.0
+        },
+        "land": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 1.0
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 1.0
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 0.5
+        },
+        "satan": {
+          "support": 727,
+          "recall": 1.0
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    },
+    {
+      "split_seed": 42,
+      "model": "weighted_boosted",
+      "threshold": 0.0860053354205932,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 13263,
+        "false_alarms": 205,
+        "missed_attacks": 1,
+        "detected_attacks": 11726,
+        "accuracy": 0.9918237745584442,
+        "false_positive_rate": 0.015221265221265221,
+        "attack_recall": 0.9999147266990706,
+        "attack_precision": 0.9828178694158075,
+        "roc_auc": 0.9999813345937675,
+        "average_precision": 0.9999786788031904
+      },
+      "per_attack": {
+        "back": {
+          "support": 192,
+          "recall": 1.0
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 1.0
+        },
+        "ftp_write": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 1.0
+        },
+        "land": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 1.0
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 1.0
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 0.5
+        },
+        "satan": {
+          "support": 727,
+          "recall": 1.0
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    },
+    {
+      "split_seed": 42,
+      "model": "logistic",
+      "threshold": 0.1714728911538308,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 12803,
+        "false_alarms": 665,
+        "missed_attacks": 146,
+        "detected_attacks": 11581,
+        "accuracy": 0.9678110736257194,
+        "false_positive_rate": 0.04937629937629938,
+        "attack_recall": 0.9875500980642961,
+        "attack_precision": 0.9456965539768087,
+        "roc_auc": 0.9964165395861482,
+        "average_precision": 0.9962436702253192
+      },
+      "per_attack": {
+        "back": {
+          "support": 192,
+          "recall": 0.59375
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 1.0
+        },
+        "ftp_write": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 0.9944444444444445
+        },
+        "land": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 0.9989081645032148
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 0.9982935153583617
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 0.0
+        },
+        "satan": {
+          "support": 727,
+          "recall": 0.9422283356258597
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 0.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 0.949438202247191
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    },
+    {
+      "split_seed": 17,
+      "model": "boosted",
+      "threshold": 0.005911320103711735,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 12876,
+        "false_alarms": 592,
+        "missed_attacks": 0,
+        "detected_attacks": 11727,
+        "accuracy": 0.9765032744592181,
+        "false_positive_rate": 0.04395604395604396,
+        "attack_recall": 1.0,
+        "attack_precision": 0.9519441513109831,
+        "roc_auc": 0.9999711946181632,
+        "average_precision": 0.9999665882897555
+      },
+      "per_attack": {
+        "back": {
+          "support": 191,
+          "recall": 1.0
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 1.0
+        },
+        "ftp_write": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 1.0
+        },
+        "land": {
+          "support": 4,
+          "recall": 1.0
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 1.0
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "perl": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 1.0
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "satan": {
+          "support": 727,
+          "recall": 1.0
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    },
+    {
+      "split_seed": 17,
+      "model": "weighted_boosted",
+      "threshold": 0.09947212039078951,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 13317,
+        "false_alarms": 151,
+        "missed_attacks": 0,
+        "detected_attacks": 11727,
+        "accuracy": 0.99400674737051,
+        "false_positive_rate": 0.011211761211761212,
+        "attack_recall": 1.0,
+        "attack_precision": 0.9872874221249368,
+        "roc_auc": 0.9999816290107923,
+        "average_precision": 0.9999786321221268
+      },
+      "per_attack": {
+        "back": {
+          "support": 191,
+          "recall": 1.0
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 1.0
+        },
+        "ftp_write": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 1.0
+        },
+        "land": {
+          "support": 4,
+          "recall": 1.0
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 1.0
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "perl": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 1.0
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 1.0
+        },
+        "satan": {
+          "support": 727,
+          "recall": 1.0
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    },
+    {
+      "split_seed": 17,
+      "model": "logistic",
+      "threshold": 0.16602672933362025,
+      "metrics": {
+        "normal": 13468,
+        "attacks": 11727,
+        "true_normal": 12802,
+        "false_alarms": 666,
+        "missed_attacks": 179,
+        "detected_attacks": 11548,
+        "accuracy": 0.966461599523715,
+        "false_positive_rate": 0.04945054945054945,
+        "attack_recall": 0.9847360791336233,
+        "attack_precision": 0.9454724087113149,
+        "roc_auc": 0.9965442310991045,
+        "average_precision": 0.9966580508614118
+      },
+      "per_attack": {
+        "back": {
+          "support": 191,
+          "recall": 0.4869109947643979
+        },
+        "buffer_overflow": {
+          "support": 6,
+          "recall": 0.8333333333333334
+        },
+        "ftp_write": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "guess_passwd": {
+          "support": 11,
+          "recall": 1.0
+        },
+        "imap": {
+          "support": 3,
+          "recall": 1.0
+        },
+        "ipsweep": {
+          "support": 720,
+          "recall": 0.9916666666666667
+        },
+        "land": {
+          "support": 4,
+          "recall": 0.5
+        },
+        "loadmodule": {
+          "support": 2,
+          "recall": 0.0
+        },
+        "multihop": {
+          "support": 1,
+          "recall": 1.0
+        },
+        "neptune": {
+          "support": 8243,
+          "recall": 0.999636054834405
+        },
+        "nmap": {
+          "support": 298,
+          "recall": 1.0
+        },
+        "perl": {
+          "support": 1,
+          "recall": 0.0
+        },
+        "phf": {
+          "support": 1,
+          "recall": 0.0
+        },
+        "pod": {
+          "support": 40,
+          "recall": 1.0
+        },
+        "portsweep": {
+          "support": 586,
+          "recall": 0.9982935153583617
+        },
+        "rootkit": {
+          "support": 2,
+          "recall": 0.0
+        },
+        "satan": {
+          "support": 727,
+          "recall": 0.9353507565337001
+        },
+        "smurf": {
+          "support": 529,
+          "recall": 1.0
+        },
+        "spy": {
+          "support": 1,
+          "recall": 0.0
+        },
+        "teardrop": {
+          "support": 178,
+          "recall": 1.0
+        },
+        "warezclient": {
+          "support": 178,
+          "recall": 0.9213483146067416
+        },
+        "warezmaster": {
+          "support": 4,
+          "recall": 1.0
+        }
+      }
+    }
+  ]
+}

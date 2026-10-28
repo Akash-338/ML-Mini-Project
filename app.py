@@ -1,6 +1,8 @@
 """Local demonstration of the group-aware binary intrusion detector."""
 from functools import lru_cache
 import math
+import hashlib
+import json
 from pathlib import Path
 from typing import Any
 import joblib
@@ -42,10 +44,18 @@ def metadata():
             raise HTTPException(status_code=503, detail=f'No {name} example available.')
         row = matches.iloc[0]
         examples[name] = {c: str(row[c]) if c in CATEGORICAL_COLUMNS else float(row[c]) for c in FEATURE_COLUMNS}
+    metrics_path = ROOT / 'results' / 'grouped_binary_results.json'
+    accuracy = 'Unavailable'
+    try:
+        report = json.loads(metrics_path.read_text(encoding='utf-8'))
+        if report.get('model_sha256') == hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest():
+            accuracy = f"{100 * report['test']['accuracy']:.2f}%"
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
     return {'features': FEATURE_COLUMNS, 'categorical_columns': CATEGORICAL_COLUMNS,
             'numerical_columns': NUMERICAL_COLUMNS, 'categories': categories, 'examples': examples,
             'model_information': {'architecture': 'Gradient-boosted trees', 'dataset': 'NSL-KDD',
-                                  'test_normal_vs_abnormal_accuracy': '87.56%'}}
+                                  'test_normal_vs_abnormal_accuracy': accuracy}}
 
 @app.post('/predict')
 def predict(payload: dict[str, Any]):
@@ -72,6 +82,15 @@ def predict(payload: dict[str, Any]):
                 raise HTTPException(status_code=422, detail=f'{name} must be a finite number.') from exc
             if not math.isfinite(row[name]):
                 raise HTTPException(status_code=422, detail=f'{name} must be a finite number.')
+            number = row[name]
+            if number < 0 or (name.endswith('_rate') and number > 1):
+                raise HTTPException(status_code=422, detail=f'{name} is outside its valid range.')
+            if not name.endswith('_rate') and not number.is_integer():
+                raise HTTPException(status_code=422, detail=f'{name} must be an integer.')
+            if name in {'land', 'logged_in', 'root_shell', 'is_host_login', 'is_guest_login'} and number not in (0, 1):
+                raise HTTPException(status_code=422, detail=f'{name} must be 0 or 1.')
+            if name == 'su_attempted' and number not in (0, 1, 2):
+                raise HTTPException(status_code=422, detail='su_attempted must be 0, 1 or 2.')
     score = float(bundle['model'].predict_proba(pd.DataFrame([row], columns=FEATURE_COLUMNS))[0, 1])
     return {'prediction': 'attack' if score >= bundle['threshold'] else 'normal',
             'attack_score_percent': score * 100, 'threshold_percent': float(bundle['threshold'] * 100)}

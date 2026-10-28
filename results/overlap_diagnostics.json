@@ -1,0 +1,31 @@
+{
+  "note": "Exploratory: test data has been used before. Feature overlap does not establish event identity. Neither subset is independent.",
+  "test_with_feature_overlap": {
+    "normal": 105,
+    "attacks": 559,
+    "true_normal": 81,
+    "false_alarms": 24,
+    "missed_attacks": 28,
+    "detected_attacks": 531,
+    "accuracy": 0.9216867469879518,
+    "false_positive_rate": 0.22857142857142856,
+    "attack_recall": 0.9499105545617174,
+    "attack_precision": 0.9567567567567568,
+    "roc_auc": 0.9237243376778261,
+    "average_precision": 0.9817028383840423
+  },
+  "test_without_feature_overlap": {
+    "normal": 9606,
+    "attacks": 12274,
+    "true_normal": 8730,
+    "false_alarms": 876,
+    "missed_attacks": 1877,
+    "detected_attacks": 10397,
+    "accuracy": 0.8741773308957953,
+    "false_positive_rate": 0.09119300437226734,
+    "attack_recall": 0.847075118135897,
+    "attack_precision": 0.9222922026080014,
+    "roc_auc": 0.9659691146810877,
+    "average_precision": 0.9678294424776044
+  }
+}

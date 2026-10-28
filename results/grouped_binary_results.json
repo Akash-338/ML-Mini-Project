@@ -275,5 +275,6 @@
     "KDDTrain+.txt": "1b86d2f957b33082081bba410fe129b475efebcc13c9014c3f447c8271aadf95",
     "KDDTest+.txt": "fa46b0935342616aa83b7c2578db355b6a7aaabbc492248172c7a1e8b7ab8f84"
   },
-  "limitations": "Some rare labels may not appear in either development partition. The test split was examined in prior work; results are exploratory rather than a pristine final holdout. Threshold controls validation FPR only, not test or deployment FPR. Not an unknown-class classifier."
+  "limitations": "Some rare labels may not appear in either development partition. The test split was examined in prior work; results are exploratory rather than a pristine final holdout. Threshold controls validation FPR only, not test or deployment FPR. Not an unknown-class classifier.",
+  "model_sha256": "b8a4e6ffb2096a564c304931789a9e6d067b097158d6e92951ee93b73b4b44d8"
 }
