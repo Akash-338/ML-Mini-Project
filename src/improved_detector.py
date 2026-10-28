@@ -1,4 +1,4 @@
-"""Validation-selected binary intrusion detector; preserves the paper baseline.
+"""Validation-selected, group-aware binary intrusion detector.
 
 Run: python -m src.improved_detector (writes separate improved artifacts).
 The historical test split has already been examined, so it is not a pristine holdout.
@@ -81,3 +81,4 @@ def run():
 
 if __name__ == '__main__':
     run()
+
