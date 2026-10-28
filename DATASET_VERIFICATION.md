@@ -1,193 +1,46 @@
-# Dataset Verification Report
+# Dataset verification
 
-## A. Dataset source
-- Source used: public NSL-KDD dataset mirror on GitHub
-- Standard files downloaded:
-  - `data/KDDTrain+.txt`
-  - `data/KDDTest+.txt`
-- Source URL used for download: `https://raw.githubusercontent.com/jmnwong/NSL-KDD-Dataset/master/`
+This document describes the files used by the current project. The earlier project record identifies a public NSL-KDD mirror at `https://raw.githubusercontent.com/jmnwong/NSL-KDD-Dataset/master/`. That record is not independent proof of the files' origin, license or suitability for a new use; verify those before redistribution or deployment.
 
-## B. File names
-- Training dataset: `data/KDDTrain+.txt`
-- Test dataset: `data/KDDTest+.txt`
+## Files and fields
 
-## C. Dataset dimensions
-- `KDDTrain+.txt`: 125,973 rows x 43 columns
-- `KDDTest+.txt`: 22,544 rows x 43 columns
-- Dataset shows: the standard NSL-KDD files contain 43 columns total.
-- Paper says: the dataset has 41 features and the final label is separated from them.
-- Status: Match for the 41-feature concept; the dataset file includes an extra `difficulty` column as part of the standard NSL-KDD format.
+| File | Records | Fields |
+|---|---:|---:|
+| `data/KDDTrain+.txt` | 125,973 | 43 |
+| `data/KDDTest+.txt` | 22,544 | 43 |
 
-## D. Original 41 features
-- Standard NSL-KDD column list observed in the selected files (excluding the final label and difficulty columns):
-  - `duration`
-  - `protocol_type`
-  - `service`
-  - `flag`
-  - `src_bytes`
-  - `dst_bytes`
-  - `land`
-  - `wrong_fragment`
-  - `urgent`
-  - `hot`
-  - `num_failed_logins`
-  - `logged_in`
-  - `num_compromised`
-  - `root_shell`
-  - `su_attempted`
-  - `num_root`
-  - `num_file_creations`
-  - `num_shells`
-  - `num_access_files`
-  - `num_outbound_cmds`
-  - `is_host_login`
-  - `is_guest_login`
-  - `count`
-  - `srv_count`
-  - `serror_rate`
-  - `srv_serror_rate`
-  - `rerror_rate`
-  - `srv_rerror_rate`
-  - `same_srv_rate`
-  - `diff_srv_rate`
-  - `srv_diff_host_rate`
-  - `dst_host_count`
-  - `dst_host_srv_count`
-  - `dst_host_same_srv_rate`
-  - `dst_host_diff_srv_rate`
-  - `dst_host_same_src_port_rate`
-  - `dst_host_srv_diff_host_rate`
-  - `dst_host_serror_rate`
-  - `dst_host_srv_serror_rate`
-  - `dst_host_rerror_rate`
-  - `dst_host_srv_rerror_rate`
-- Observed dataset structure:
-  - 41 original feature columns
-  - 1 label column
-  - 1 difficulty column
-- Paper says: there are 41 features and one label column.
-- Dataset shows: 41 features + label + difficulty = 43 columns total.
-- Status: Match for the feature count; the paper omits the difficulty column from the feature discussion, which is consistent with it being an auxiliary field rather than an input feature.
+Each record contains **41 features**, a text attack `label`, and a `difficulty` field. The current detector excludes the last two fields from its feature matrix. It turns the label into a binary target: `normal` is normal, every other label is attack. `src/preprocessing.py` is the authoritative ordered schema.
 
-## E. Categorical feature analysis
-- Categorical columns observed in the standard NSL-KDD text files:
-  - `protocol_type`
-  - `service`
-  - `flag`
-  - `label`
-- Data type check:
-  - numeric fields: integer/float numeric columns
-  - categorical fields: protocol_type, service, flag, label are string-like categorical columns
-- Unique values observed:
-  - `protocol_type`:
-    - Training: 3 unique values (`icmp`, `tcp`, `udp`)
-    - Test: 3 unique values (`icmp`, `tcp`, `udp`)
-  - `service`:
-    - Training: 70 unique values
-    - Test: 64 unique values
-  - `flag`:
-    - Training: 11 unique values
-    - Test: 11 unique values
-  - `label`:
-    - Training: 23 unique labels
-    - Test: 38 unique labels
-- Paper says: the values of three of the original features come from a controlled set of terms, which are handled by one-hot encoding.
-- Dataset shows: `protocol_type`, `service`, and `flag` are exactly the categorical features with controlled values.
-- Status: Match.
+The three categorical input features are `protocol_type`, `service` and `flag`; the remaining 38 are numeric. The encoder fits categorical values on the training partition. It ignores unknown categories in the model pipeline, while the demo currently requires categorical choices from the fitted encoder.
 
-## F. Label analysis
-- Label column name: `label`
-- Training labels:
-  - 23 unique labels
-  - includes `normal` and 22 attack classes
-- Test labels:
-  - 38 unique labels
-  - includes many attack classes not present in the training set
-- Dataset shows there are more unique labels in the test set than the train set, consistent with the paper's statement that the test set contains new/unknown attacks.
-- Paper says: the training set contains 22 attack types and the test set contains 37 attack types, with 17 of them new.
-- Dataset shows: the raw files contain 23 unique training labels and 38 unique test labels, which is consistent with the paper's discussion of known and unknown attacks.
-- Status: Match.
+For the full original training file, the category counts are 3 protocols, 70 services and 11 flags. These produce 122 columns when combined with the 38 numeric inputs for the historical ANN. The current boosted pipeline fits its encoder on the development training partition, so its transformed width follows the categories present in that partition.
 
-## G. Class distribution
+## Data quality and class distribution
 
-### Training set (`KDDTrain+.txt`)
-- Total rows: 125,973
-- Top labels:
-  - `normal`: 67,343
-  - `neptune`: 41,214
-  - `satan`: 3,633
-  - `ipsweep`: 3,599
-  - `portsweep`: 2,931
-  - `smurf`: 2,646
-  - `nmap`: 1,493
-  - `back`: 956
-  - `teardrop`: 892
-  - `warezclient`: 890
-- Total distinct labels: 23
+The saved [data audit](results/data_audit.json) reports no missing values or non-finite numeric values in these two files. It reports 16 repeated feature rows in the training file and 57 in the test file. There are 664 test rows whose 41-feature vector occurs in the full training file; this is feature overlap and does not by itself establish event identity or label agreement. Hashes of the files are saved in the audit and model result reports.
 
-### Test set (`KDDTest+.txt`)
-- Total rows: 22,544
-- Top labels:
-  - `normal`: 9,711
-  - `neptune`: 4,657
-  - `guess_passwd`: 1,231
-  - `mscan`: 996
-  - `warezmaster`: 944
-  - `apache2`: 737
-  - `satan`: 735
-  - `processtable`: 685
-  - `smurf`: 665
-  - `back`: 359
-- Total distinct labels: 38
+The full training file has 67,343 normal records and 58,630 attacks. It contains 22 attack names. The test file has 9,711 normal records and 12,833 attacks, including 17 attack names absent from the full training file, covering 3,750 test rows. Counts by label and observed categorical values are in `results/data_audit.json`.
 
-## H. Comparison with the paper
-- Paper says: there are 41 original input features before preprocessing.
-- Dataset shows: 41 feature columns are present, followed by `label` and `difficulty`.
-- Status: Match.
+Some attack types have very few examples. The group-split training script warns that the least-populated label has only two records. A large overall accuracy therefore cannot establish reliable detection of every attack type.
 
-- Paper says: the model uses one-hot encoding on categorical features and ends up with 122 inputs.
-- Dataset shows:
-  - numeric feature count = 38
-  - categorical feature counts = `protocol_type` (3) + `service` (70) + `flag` (11)
-  - one-hot encoded total = 38 + 3 + 70 + 11 = 122
-- Status: Match.
+## Split used for the retained model
 
-- Paper says: the labels are represented as 24 output classes.
-- Dataset shows:
-  - training labels include normal + 22 known attack classes = 23 unique labels
-  - the paper describes a 24th output class for any other attack / unknown attack
-- Status: Match to the paper's conceptual explanation, with the raw dataset itself not containing a literal 24th label column in the input files.
+The saved run splits `KDDTrain+` into **100,778 model-training rows** and **25,195 validation rows** with a group-aware split. Grouping uses a hash of all 41 feature values, so records with the same hash stay together within the development split. The splitter attempts to preserve attack-label distributions but rare labels can be unevenly represented. The 22,544 KDDTest+ records are evaluated separately after selecting the threshold.
 
-- Paper says: the dataset contains a difficulty-related field.
-- Dataset shows: `difficulty` is present in the standard NSL-KDD files.
-- Status: Match.
+The test set has already been examined during development and has feature overlap with the training file. It is therefore not a pristine final holdout. `src/overlap_diagnostics.py` provides a descriptive comparison for test rows with and without overlapping features, not an independent evaluation.
 
-- Paper says: 17 test-set attacks are new and do not appear in the training data.
-- Dataset shows: the test set has 38 unique labels while the training set has 23, which is consistent with unseen attack classes being present in the test set.
-- Status: Match.
+## Relationship to the paper
 
-## I. Any discrepancies or unresolved issues
-- Paper says: the model output has 24 classes.
-- Dataset shows: raw label files do not contain a literal 24-class label encoding; instead, the dataset stores attack names as string labels, and the paper’s 24-class encoding is a modeling decision made after preprocessing.
-- Status: Unclear from the raw files alone; matches the paper’s methodology only after the authors explicitly construct the label matrix.
+The supplied paper describes 41 features, three categorical inputs and a 122-input ANN. The raw file also has a difficulty field in addition to the label. The paper describes 22 known training attack types and 17 attack types present only in test; the observed set difference supports those counts. Its table lists 9,710 normal test records, whereas this file contains 9,711, so its table total is one record lower than the supplied file. The cause is not established.
 
-- Paper says: the model excludes the label column from X.
-- Dataset shows: the raw data includes a `label` column at the end, and a `difficulty` column is also present.
-- Status: Match for the intended modeling setup, but the raw files themselves contain both of these columns.
+The paper describes a 24th output for other attacks but does not explain how that output obtains positive training examples. The current retained model is binary and does not reproduce that output. The paper also does not specify enough regularization detail for an exact ANN reproduction.
 
-- Paper says: the data is standardized to zero mean and unit variance.
-- Dataset shows: no explicit normalization is applied yet at the raw-file stage; this is a preprocessing step to be performed later.
-- Status: Not yet applied in the raw dataset; consistent with the paper’s preprocessing plan.
+## Reproduce the audit
 
-- Paper says: 41 original input features are used before one-hot encoding.
-- Dataset shows: the raw files include 41 features plus 2 extra metadata columns (`label`, `difficulty`), so the exact separation between feature set and metadata must be enforced during preprocessing.
-- Status: Match, but must be handled carefully in implementation.
+From the project root, using the configured environment:
 
-## Final assessment
-- The selected NSL-KDD files are the standard train/test split and are structurally consistent with the paper.
-- The paper’s 122 input feature count is reproducible from the selected files by one-hot encoding the categorical columns `protocol_type`, `service`, and `flag`.
-- The `label` column and the `difficulty` column should not both be included in X.
-- The `difficulty` column should be treated as metadata, not as part of the 41 model features.
+```powershell
+.\.venv\Scripts\python.exe -m src.data_audit
+```
 
-DATASET STATUS:
-- Ready for preprocessing
+This overwrites `results/data_audit.json`. The script reads the local files; it does not download or independently verify their provenance. For the model training and evaluation procedure, see [MODEL_WORKFLOW.md](MODEL_WORKFLOW.md).
