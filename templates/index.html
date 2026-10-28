@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security Attacks Detection | NSL-KDD</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17243b;
+      --muted: #64748b;
+      --line: #dbe4f0;
+      --surface: #ffffff;
+      --background: #f2f6fc;
+      --accent: #2359d1;
+      --good: #087647;
+      --bad: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--ink);
+      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    header {
+      padding: 30px max(24px, calc((100vw - 1180px) / 2));
+      color: white;
+      background: linear-gradient(120deg, #142b55, #2359d1);
+    }
+    header h1 { margin: 0 0 6px; font-size: clamp(1.5rem, 3vw, 2.2rem); }
+    header p { margin: 0; color: #dbeafe; }
+    main { max-width: 1180px; margin: 24px auto; padding: 0 20px 40px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.8fr); gap: 20px; align-items: start; }
+    .card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 5px 18px #19345b0a;
+    }
+    .card h2 { margin: 0 0 6px; font-size: 1.2rem; }
+    .subtle { margin: 0 0 18px; color: var(--muted); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    button {
+      min-height: 40px;
+      padding: 9px 15px;
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      background: var(--accent);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    button.secondary { color: #20365f; background: #e8eef9; }
+    button:hover { filter: brightness(.96); }
+    button:disabled { cursor: wait; opacity: .7; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    label { display: flex; min-width: 0; flex-direction: column; gap: 5px; color: #34445f; font-size: .83rem; font-weight: 600; }
+    input, select {
+      width: 100%;
+      min-height: 39px;
+      padding: 7px 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      color: var(--ink);
+      background: white;
+      font: inherit;
+    }
+    input:focus, select:focus { outline: 2px solid #94b4ff; border-color: var(--accent); }
+    .submit { width: 100%; margin-top: 18px; }
+    .result { min-height: 145px; margin-bottom: 16px; }
+    .result-status { margin: 4px 0 10px; font-size: 1.25rem; font-weight: 800; }
+    .result-status.normal { color: var(--good); }
+    .result-status.attack { color: var(--bad); }
+    .result-status.error { color: var(--bad); }
+    .result-detail { margin: 5px 0; }
+    .confidence-track { height: 9px; margin-top: 9px; overflow: hidden; border-radius: 8px; background: #e8edf5; }
+    .confidence-fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .info-item { padding: 11px; border-radius: 8px; background: #f5f8fd; }
+    .info-item span { display: block; color: var(--muted); font-size: .78rem; }
+    .info-item strong { display: block; margin-top: 3px; font-size: .95rem; }
+    .note { margin: 16px 0 0; padding: 12px; border-left: 3px solid #d99a14; border-radius: 4px; background: #fff9e9; color: #5c471c; font-size: .86rem; }
+    .footer-note { margin: 18px 0 0; color: var(--muted); font-size: .82rem; }
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      main { padding-inline: 12px; }
+      .card { padding: 16px; }
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Using Neural Network for Security Attacks Detection</h1>
+    <p>Local NSL-KDD demonstration using the project's existing trained ANN.</p>
+  </header>
+  <main>
+    <div class="layout">
+      <section class="card">
+        <h2>Network traffic features</h2>
+        <p class="subtle">Enter the 41 original NSL-KDD input features. Categorical choices come from the saved encoder.</p>
+        <div class="toolbar">
+          <button class="secondary" id="normal-example" type="button" disabled>Load Normal Example</button>
+          <button class="secondary" id="attack-example" type="button" disabled>Load Attack Example</button>
+        </div>
+        <form id="traffic-form">
+          <div class="feature-grid" id="feature-fields" aria-live="polite"></div>
+          <button class="submit" id="detect-button" type="submit" disabled>Detect Attack</button>
+        </form>
+        <p class="footer-note">Dataset examples are for demonstration only; they do not represent live network packets.</p>
+      </section>
+      <aside>
+        <section class="card result" aria-live="polite">
+          <h2>Detection result</h2>
+          <p class="subtle">Submit a traffic record to see the saved model's prediction.</p>
+          <div id="result-content"></div>
+        </section>
+        <section class="card">
+          <h2>Model Information</h2>
+          <p class="subtle">Existing saved experiment</p>
+          <div class="info-grid" id="model-information"></div>
+          <p class="note">Note: The current supervised model includes an unknown/other class for analysis, but successful zero-day attack detection is not claimed.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <script>
+    const form = document.getElementById("traffic-form");
+    const fields = document.getElementById("feature-fields");
+    const resultContent = document.getElementById("result-content");
+    const detectButton = document.getElementById("detect-button");
+    let demoMetadata;
+
+    function addField(name, isCategorical, options) {
+      const label = document.createElement("label");
+      label.htmlFor = `feature-${name}`;
+      label.textContent = name;
+      let input;
+      if (isCategorical) {
+        input = document.createElement("select");
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Select...";
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        input.append(placeholder);
+        for (const optionValue of options) {
+          const option = document.createElement("option");
+          option.value = optionValue;
+          option.textContent = optionValue;
+          input.append(option);
+        }
+      } else {
+        input = document.createElement("input");
+        input.type = "number";
+        input.step = "any";
+        input.inputMode = "decimal";
+      }
+      input.id = `feature-${name}`;
+      input.name = name;
+      input.required = true;
+      label.append(input);
+      fields.append(label);
+    }
+
+    function showError(message) {
+      resultContent.replaceChildren();
+      const error = document.createElement("p");
+      error.className = "result-status error";
+      error.textContent = message;
+      resultContent.append(error);
+    }
+
+    async function initialize() {
+      try {
+        const response = await fetch("/metadata");
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || "Unable to load model information.");
+        demoMetadata = data;
+        for (const name of data.features) {
+          addField(name, data.categorical_columns.includes(name), data.categories[name] || []);
+        }
+        for (const [label, value] of Object.entries(data.model_information)) {
+          const item = document.createElement("div");
+          item.className = "info-item";
+          const title = document.createElement("span");
+          title.textContent = label.replaceAll("_", " ");
+          const text = document.createElement("strong");
+          text.textContent = value;
+          item.append(title, text);
+          document.getElementById("model-information").append(item);
+        }
+        document.getElementById("normal-example").disabled = false;
+        document.getElementById("attack-example").disabled = false;
+        detectButton.disabled = false;
+      } catch (error) {
+        showError(error.message);
+      }
+    }
+
+    function loadExample(exampleName) {
+      const example = demoMetadata.examples[exampleName];
+      for (const [name, value] of Object.entries(example)) {
+        const input = form.elements.namedItem(name);
+        input.value = value;
+      }
+      resultContent.replaceChildren();
+    }
+
+    document.getElementById("normal-example").addEventListener("click", () => loadExample("normal"));
+    document.getElementById("attack-example").addEventListener("click", () => loadExample("attack"));
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      detectButton.disabled = true;
+      resultContent.replaceChildren();
+      const payload = {};
+      for (const name of demoMetadata.features) {
+        const input = form.elements.namedItem(name);
+        payload[name] = demoMetadata.categorical_columns.includes(name) ? input.value : Number(input.value);
+      }
+      try {
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || "Prediction failed.");
+        const status = document.createElement("p");
+        status.className = `result-status ${data.prediction}`;
+        status.textContent = data.status;
+        const attackType = document.createElement("p");
+        attackType.className = "result-detail";
+        attackType.textContent = `Attack Type: ${data.predicted_class}`;
+        const confidence = document.createElement("p");
+        confidence.className = "result-detail";
+        confidence.textContent = `Confidence: ${data.confidence_percent.toFixed(2)}%`;
+        const track = document.createElement("div");
+        track.className = "confidence-track";
+        const fill = document.createElement("div");
+        fill.className = "confidence-fill";
+        fill.style.width = `${Math.max(0, Math.min(100, data.confidence_percent))}%`;
+        track.append(fill);
+        resultContent.append(status, attackType, confidence, track);
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        detectButton.disabled = false;
+      }
+    });
+
+    initialize();
+  </script>
+</body>
+</html>

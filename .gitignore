@@ -1,0 +1,22 @@
+# Python environments and caches
+.venv/
+.venv-*/
+venv/
+.runtime/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+# Local editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+# Temporary outputs
+*.log
