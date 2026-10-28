@@ -13,7 +13,7 @@ Two alternatives were explored:
 1. **Class-weighted ANN:** the same network architecture with inverse-frequency training weights. We tried it because rare attacks contribute little to an unweighted loss. It increased attack recall, but its false-alarm rate increased and the largest weights made training unstable. It could predict known attack labels, but its reserved unknown class had no positive training examples.
 2. **Gradient-boosted detector:** an ensemble of decision trees trained for normal-versus-attack detection. We tried it because tree ensembles can learn nonlinear patterns in tabular data and provide an attack score for a chosen threshold. In the recorded comparison it detected more attacks than either ANN. It cannot name the attack and misses important attack types.
 
-The baseline and weighted ANN files were removed in the project cleanup. Their historical code and outputs remain accessible through Git history, including commit `394c8f4`. Only the group-aware boosted detector remains in the current tree. [MODEL_WORKFLOW.md](MODEL_WORKFLOW.md) gives the detailed method and limitations.
+The baseline and weighted ANN files were removed in the project cleanup. Their historical code and outputs remain accessible through Git history, including commit `394c8f4`. Only the group-aware boosted detector remains in the current tree. [MODEL_WORKFLOW.md](MODEL_WORKFLOW.md) gives the detailed method and limitations. [MODEL_COMPARISON.md](MODEL_COMPARISON.md) compares the three approaches and explains why they were used.
 
 ## Data and workflow
 
