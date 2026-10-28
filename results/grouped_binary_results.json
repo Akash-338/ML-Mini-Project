@@ -1,0 +1,279 @@
+{
+  "task": "binary normal vs attack; does not identify unknown attack types",
+  "seed": 42,
+  "split": "stratified group fold by 41-feature hash",
+  "validation_absent_training_labels": [],
+  "train_rows": 100778,
+  "validation_rows": 25195,
+  "test_rows": 22544,
+  "validation_fpr_target": 0.05,
+  "threshold": 0.010878611369230334,
+  "validation": {
+    "normal": 13468,
+    "attacks": 11727,
+    "true_normal": 13085,
+    "false_alarms": 383,
+    "missed_attacks": 1,
+    "detected_attacks": 11726,
+    "accuracy": 0.9847588807303036,
+    "false_positive_rate": 0.02843777843777844,
+    "attack_recall": 0.9999147266990706,
+    "attack_precision": 0.9683706334131638,
+    "roc_auc": 0.999977383707238,
+    "average_precision": 0.9999740327503377
+  },
+  "test": {
+    "normal": 9711,
+    "attacks": 12833,
+    "true_normal": 8811,
+    "false_alarms": 900,
+    "missed_attacks": 1905,
+    "detected_attacks": 10928,
+    "accuracy": 0.8755766501064585,
+    "false_positive_rate": 0.09267840593141798,
+    "attack_recall": 0.8515545858333983,
+    "attack_precision": 0.9239093676022996,
+    "roc_auc": 0.9656972422113872,
+    "average_precision": 0.968570434663952
+  },
+  "unseen_test_attacks": {
+    "support": 3750,
+    "detected_as_attack": 2996,
+    "recall": 0.7989333333333334
+  },
+  "per_attack": {
+    "apache2": {
+      "support": 737,
+      "detected": 649,
+      "recall": 0.8805970149253731,
+      "seen_in_training": false
+    },
+    "back": {
+      "support": 359,
+      "detected": 359,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "buffer_overflow": {
+      "support": 20,
+      "detected": 19,
+      "recall": 0.95,
+      "seen_in_training": true
+    },
+    "ftp_write": {
+      "support": 3,
+      "detected": 1,
+      "recall": 0.3333333333333333,
+      "seen_in_training": true
+    },
+    "guess_passwd": {
+      "support": 1231,
+      "detected": 223,
+      "recall": 0.18115353371242893,
+      "seen_in_training": true
+    },
+    "httptunnel": {
+      "support": 133,
+      "detected": 108,
+      "recall": 0.8120300751879699,
+      "seen_in_training": false
+    },
+    "imap": {
+      "support": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "ipsweep": {
+      "support": 141,
+      "detected": 141,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "land": {
+      "support": 7,
+      "detected": 7,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "loadmodule": {
+      "support": 2,
+      "detected": 2,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "mailbomb": {
+      "support": 293,
+      "detected": 289,
+      "recall": 0.9863481228668942,
+      "seen_in_training": false
+    },
+    "mscan": {
+      "support": 996,
+      "detected": 972,
+      "recall": 0.9759036144578314,
+      "seen_in_training": false
+    },
+    "multihop": {
+      "support": 18,
+      "detected": 12,
+      "recall": 0.6666666666666666,
+      "seen_in_training": true
+    },
+    "named": {
+      "support": 17,
+      "detected": 14,
+      "recall": 0.8235294117647058,
+      "seen_in_training": false
+    },
+    "neptune": {
+      "support": 4657,
+      "detected": 4657,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "nmap": {
+      "support": 73,
+      "detected": 73,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "perl": {
+      "support": 2,
+      "detected": 2,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "phf": {
+      "support": 2,
+      "detected": 1,
+      "recall": 0.5,
+      "seen_in_training": true
+    },
+    "pod": {
+      "support": 41,
+      "detected": 41,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "portsweep": {
+      "support": 157,
+      "detected": 157,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "processtable": {
+      "support": 685,
+      "detected": 606,
+      "recall": 0.8846715328467153,
+      "seen_in_training": false
+    },
+    "ps": {
+      "support": 15,
+      "detected": 11,
+      "recall": 0.7333333333333333,
+      "seen_in_training": false
+    },
+    "rootkit": {
+      "support": 13,
+      "detected": 5,
+      "recall": 0.38461538461538464,
+      "seen_in_training": true
+    },
+    "saint": {
+      "support": 319,
+      "detected": 319,
+      "recall": 1.0,
+      "seen_in_training": false
+    },
+    "satan": {
+      "support": 735,
+      "detected": 735,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "sendmail": {
+      "support": 14,
+      "detected": 4,
+      "recall": 0.2857142857142857,
+      "seen_in_training": false
+    },
+    "smurf": {
+      "support": 665,
+      "detected": 665,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "snmpgetattack": {
+      "support": 178,
+      "detected": 0,
+      "recall": 0.0,
+      "seen_in_training": false
+    },
+    "snmpguess": {
+      "support": 331,
+      "detected": 7,
+      "recall": 0.021148036253776436,
+      "seen_in_training": false
+    },
+    "sqlattack": {
+      "support": 2,
+      "detected": 2,
+      "recall": 1.0,
+      "seen_in_training": false
+    },
+    "teardrop": {
+      "support": 12,
+      "detected": 12,
+      "recall": 1.0,
+      "seen_in_training": true
+    },
+    "udpstorm": {
+      "support": 2,
+      "detected": 2,
+      "recall": 1.0,
+      "seen_in_training": false
+    },
+    "warezmaster": {
+      "support": 944,
+      "detected": 819,
+      "recall": 0.8675847457627118,
+      "seen_in_training": true
+    },
+    "worm": {
+      "support": 2,
+      "detected": 0,
+      "recall": 0.0,
+      "seen_in_training": false
+    },
+    "xlock": {
+      "support": 9,
+      "detected": 1,
+      "recall": 0.1111111111111111,
+      "seen_in_training": false
+    },
+    "xsnoop": {
+      "support": 4,
+      "detected": 2,
+      "recall": 0.5,
+      "seen_in_training": false
+    },
+    "xterm": {
+      "support": 13,
+      "detected": 10,
+      "recall": 0.7692307692307693,
+      "seen_in_training": false
+    }
+  },
+  "versions": {
+    "python": "3.13.14",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0"
+  },
+  "data_sha256": {
+    "KDDTrain+.txt": "1b86d2f957b33082081bba410fe129b475efebcc13c9014c3f447c8271aadf95",
+    "KDDTest+.txt": "fa46b0935342616aa83b7c2578db355b6a7aaabbc492248172c7a1e8b7ab8f84"
+  },
+  "limitations": "Some rare labels may not appear in either development partition. The test split was examined in prior work; results are exploratory rather than a pristine final holdout. Threshold controls validation FPR only, not test or deployment FPR. Not an unknown-class classifier."
+}

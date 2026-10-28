@@ -1,263 +1,38 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Security Attacks Detection | NSL-KDD</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #17243b;
-      --muted: #64748b;
-      --line: #dbe4f0;
-      --surface: #ffffff;
-      --background: #f2f6fc;
-      --accent: #2359d1;
-      --good: #087647;
-      --bad: #b42318;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--background);
-      color: var(--ink);
-      font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
-    }
-    header {
-      padding: 30px max(24px, calc((100vw - 1180px) / 2));
-      color: white;
-      background: linear-gradient(120deg, #142b55, #2359d1);
-    }
-    header h1 { margin: 0 0 6px; font-size: clamp(1.5rem, 3vw, 2.2rem); }
-    header p { margin: 0; color: #dbeafe; }
-    main { max-width: 1180px; margin: 24px auto; padding: 0 20px 40px; }
-    .layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.8fr); gap: 20px; align-items: start; }
-    .card {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--surface);
-      box-shadow: 0 5px 18px #19345b0a;
-    }
-    .card h2 { margin: 0 0 6px; font-size: 1.2rem; }
-    .subtle { margin: 0 0 18px; color: var(--muted); }
-    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
-    button {
-      min-height: 40px;
-      padding: 9px 15px;
-      border: 0;
-      border-radius: 8px;
-      color: white;
-      background: var(--accent);
-      font: inherit;
-      font-weight: 650;
-      cursor: pointer;
-    }
-    button.secondary { color: #20365f; background: #e8eef9; }
-    button:hover { filter: brightness(.96); }
-    button:disabled { cursor: wait; opacity: .7; }
-    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    label { display: flex; min-width: 0; flex-direction: column; gap: 5px; color: #34445f; font-size: .83rem; font-weight: 600; }
-    input, select {
-      width: 100%;
-      min-height: 39px;
-      padding: 7px 9px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
-      color: var(--ink);
-      background: white;
-      font: inherit;
-    }
-    input:focus, select:focus { outline: 2px solid #94b4ff; border-color: var(--accent); }
-    .submit { width: 100%; margin-top: 18px; }
-    .result { min-height: 145px; margin-bottom: 16px; }
-    .result-status { margin: 4px 0 10px; font-size: 1.25rem; font-weight: 800; }
-    .result-status.normal { color: var(--good); }
-    .result-status.attack { color: var(--bad); }
-    .result-status.error { color: var(--bad); }
-    .result-detail { margin: 5px 0; }
-    .confidence-track { height: 9px; margin-top: 9px; overflow: hidden; border-radius: 8px; background: #e8edf5; }
-    .confidence-fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .info-item { padding: 11px; border-radius: 8px; background: #f5f8fd; }
-    .info-item span { display: block; color: var(--muted); font-size: .78rem; }
-    .info-item strong { display: block; margin-top: 3px; font-size: .95rem; }
-    .note { margin: 16px 0 0; padding: 12px; border-left: 3px solid #d99a14; border-radius: 4px; background: #fff9e9; color: #5c471c; font-size: .86rem; }
-    .footer-note { margin: 18px 0 0; color: var(--muted); font-size: .82rem; }
-    @media (max-width: 850px) {
-      .layout { grid-template-columns: 1fr; }
-      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 480px) {
-      main { padding-inline: 12px; }
-      .card { padding: 16px; }
-      .feature-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic Inspector | NSL-KDD</title>
+<style>
+:root{color-scheme:light;--ink:#17283a;--muted:#69798a;--line:#e1e8ed;--navy:#102c3c;--teal:#007f78;--bg:#f3f6f5;--orange:#b05a23}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}header{background:var(--navy);color:white} .top{max-width:1280px;margin:auto;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-weight:750;letter-spacing:.01em}.logo{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#33b4a6;color:#092e30;font-size:19px}.badge{border:1px solid #ffffff35;border-radius:99px;padding:5px 11px;font-size:.75rem;color:#d1e4e5}.shell{max-width:1280px;margin:auto;padding:38px 28px 60px}.eyebrow{color:var(--teal);font-size:.73rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.intro{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:26px}.intro h1{font-size:clamp(2rem,4vw,2.8rem);line-height:1.12;letter-spacing:-.04em;margin:9px 0}.intro p{color:var(--muted);margin:0;max-width:650px}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr);gap:22px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 28px #19394408}.panel-head{padding:22px 24px;border-bottom:1px solid var(--line)}h2{font-size:1.08rem;margin:0 0 4px;letter-spacing:-.01em}.muted{color:var(--muted)}.panel-head p{margin:0;font-size:.88rem}.content{padding:22px 24px}.examples{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:20px}.examples span{font-weight:650;font-size:.83rem;margin-right:4px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:9px 13px;font-size:.84rem;font-weight:700}.btn:hover{border-color:#87bcb8;background:#f4fbfa}.btn-primary{color:white;background:var(--teal);border-color:var(--teal);padding:13px 18px;font-size:.94rem}.btn-primary:hover{background:#006b65;color:white}.hint{background:#eff8f6;border:1px solid #d7eeea;border-radius:9px;color:#3f6966;padding:11px 13px;margin:0 0 18px;font-size:.84rem}.progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.82rem;color:var(--muted)}.progress strong{color:var(--ink)}.group{border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden}.group summary{cursor:pointer;padding:14px 15px;list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:700}.group summary::-webkit-details-marker{display:none}.group summary:after{content:'+';font-size:1.2rem;color:var(--teal)}.group[open] summary:after{content:'−'}.group small{font-weight:400;color:var(--muted);margin-left:7px}.feature-grid{border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:16px}.field{display:flex;min-width:0;flex-direction:column;gap:6px;font-size:.77rem;font-weight:700;color:#405367}.field span{overflow-wrap:anywhere}.field input,.field select{min-width:0;width:100%;height:40px;border:1px solid #ccd9df;border-radius:7px;background:#fff;color:var(--ink);padding:7px 9px;font-size:.9rem}.field input:focus,.field select:focus{outline:3px solid #b9e4df;border-color:var(--teal)}.actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}.actions p{color:var(--muted);font-size:.78rem;margin:0}.side{display:grid;gap:18px}.result-placeholder{padding:16px 0 4px;color:var(--muted)}.result-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#eaf5f3;color:var(--teal);font-size:23px;margin-bottom:14px}.result-status{font-size:1.28rem;font-weight:800;margin:4px 0 12px}.normal{color:#087a5c}.attack,.error{color:#b43d2f}.result-detail{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding:11px 0;margin:0}.result-detail span{color:var(--muted)}.disclaimer{font-size:.8rem;color:var(--muted);margin:12px 0 0}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#f5f8f8;border-radius:9px;padding:12px}.stat span{display:block;color:var(--muted);font-size:.75rem}.stat strong{display:block;margin-top:4px}.notice{background:#fff8ed;border:1px solid #f2e4cd;color:#765a33;border-radius:9px;padding:12px;margin-top:16px;font-size:.8rem}.footer{margin-top:25px;color:var(--muted);font-size:.8rem} @media(max-width:900px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.shell{padding:26px 14px 40px}.top{padding:15px}.badge{display:none}.side{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr}.content,.panel-head{padding:18px}.actions{align-items:stretch;flex-direction:column}.actions button{width:100%}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Using Neural Network for Security Attacks Detection</h1>
-    <p>Local NSL-KDD demonstration using the project's existing trained ANN.</p>
-  </header>
-  <main>
-    <div class="layout">
-      <section class="card">
-        <h2>Network traffic features</h2>
-        <p class="subtle">Enter the 41 original NSL-KDD input features. Categorical choices come from the saved encoder.</p>
-        <div class="toolbar">
-          <button class="secondary" id="normal-example" type="button" disabled>Load Normal Example</button>
-          <button class="secondary" id="attack-example" type="button" disabled>Load Attack Example</button>
-        </div>
-        <form id="traffic-form">
-          <div class="feature-grid" id="feature-fields" aria-live="polite"></div>
-          <button class="submit" id="detect-button" type="submit" disabled>Detect Attack</button>
-        </form>
-        <p class="footer-note">Dataset examples are for demonstration only; they do not represent live network packets.</p>
-      </section>
-      <aside>
-        <section class="card result" aria-live="polite">
-          <h2>Detection result</h2>
-          <p class="subtle">Submit a traffic record to see the saved model's prediction.</p>
-          <div id="result-content"></div>
-        </section>
-        <section class="card">
-          <h2>Model Information</h2>
-          <p class="subtle">Existing saved experiment</p>
-          <div class="info-grid" id="model-information"></div>
-          <p class="note">Note: The current supervised model includes an unknown/other class for analysis, but successful zero-day attack detection is not claimed.</p>
-        </section>
-      </aside>
-    </div>
-  </main>
-  <script>
-    const form = document.getElementById("traffic-form");
-    const fields = document.getElementById("feature-fields");
-    const resultContent = document.getElementById("result-content");
-    const detectButton = document.getElementById("detect-button");
-    let demoMetadata;
-
-    function addField(name, isCategorical, options) {
-      const label = document.createElement("label");
-      label.htmlFor = `feature-${name}`;
-      label.textContent = name;
-      let input;
-      if (isCategorical) {
-        input = document.createElement("select");
-        const placeholder = document.createElement("option");
-        placeholder.value = "";
-        placeholder.textContent = "Select...";
-        placeholder.disabled = true;
-        placeholder.selected = true;
-        input.append(placeholder);
-        for (const optionValue of options) {
-          const option = document.createElement("option");
-          option.value = optionValue;
-          option.textContent = optionValue;
-          input.append(option);
-        }
-      } else {
-        input = document.createElement("input");
-        input.type = "number";
-        input.step = "any";
-        input.inputMode = "decimal";
-      }
-      input.id = `feature-${name}`;
-      input.name = name;
-      input.required = true;
-      label.append(input);
-      fields.append(label);
-    }
-
-    function showError(message) {
-      resultContent.replaceChildren();
-      const error = document.createElement("p");
-      error.className = "result-status error";
-      error.textContent = message;
-      resultContent.append(error);
-    }
-
-    async function initialize() {
-      try {
-        const response = await fetch("/metadata");
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || "Unable to load model information.");
-        demoMetadata = data;
-        for (const name of data.features) {
-          addField(name, data.categorical_columns.includes(name), data.categories[name] || []);
-        }
-        for (const [label, value] of Object.entries(data.model_information)) {
-          const item = document.createElement("div");
-          item.className = "info-item";
-          const title = document.createElement("span");
-          title.textContent = label.replaceAll("_", " ");
-          const text = document.createElement("strong");
-          text.textContent = value;
-          item.append(title, text);
-          document.getElementById("model-information").append(item);
-        }
-        document.getElementById("normal-example").disabled = false;
-        document.getElementById("attack-example").disabled = false;
-        detectButton.disabled = false;
-      } catch (error) {
-        showError(error.message);
-      }
-    }
-
-    function loadExample(exampleName) {
-      const example = demoMetadata.examples[exampleName];
-      for (const [name, value] of Object.entries(example)) {
-        const input = form.elements.namedItem(name);
-        input.value = value;
-      }
-      resultContent.replaceChildren();
-    }
-
-    document.getElementById("normal-example").addEventListener("click", () => loadExample("normal"));
-    document.getElementById("attack-example").addEventListener("click", () => loadExample("attack"));
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      detectButton.disabled = true;
-      resultContent.replaceChildren();
-      const payload = {};
-      for (const name of demoMetadata.features) {
-        const input = form.elements.namedItem(name);
-        payload[name] = demoMetadata.categorical_columns.includes(name) ? input.value : Number(input.value);
-      }
-      try {
-        const response = await fetch("/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || "Prediction failed.");
-        const status = document.createElement("p");
-        status.className = `result-status ${data.prediction}`;
-        status.textContent = data.status;
-        const attackType = document.createElement("p");
-        attackType.className = "result-detail";
-        attackType.textContent = `Attack Type: ${data.predicted_class}`;
-        const confidence = document.createElement("p");
-        confidence.className = "result-detail";
-        confidence.textContent = `Confidence: ${data.confidence_percent.toFixed(2)}%`;
-        const track = document.createElement("div");
-        track.className = "confidence-track";
-        const fill = document.createElement("div");
-        fill.className = "confidence-fill";
-        fill.style.width = `${Math.max(0, Math.min(100, data.confidence_percent))}%`;
-        track.append(fill);
-        resultContent.append(status, attackType, confidence, track);
-      } catch (error) {
-        showError(error.message);
-      } finally {
-        detectButton.disabled = false;
-      }
-    });
-
-    initialize();
-  </script>
-</body>
-</html>
+<header><div class="top"><div class="brand"><span class="logo" aria-hidden="true">◈</span> Traffic Inspector</div><span class="badge">NSL-KDD · Research demo</span></div></header>
+<main class="shell"><div class="intro"><div><div class="eyebrow">Network security / Analysis</div><h1>Inspect a traffic record.</h1><p>Explore how the baseline neural network classifies network activity. Start with an example, or enter your own feature values.</p></div></div>
+<div class="layout"><section class="panel"><div class="panel-head"><h2>Traffic details</h2><p class="muted">All 41 features are required to analyze a record.</p></div><div class="content">
+<div class="examples"><span>Start with an example</span><button class="btn" id="normal-example" type="button" disabled>Normal traffic</button><button class="btn" id="attack-example" type="button" disabled>Attack traffic</button><button class="btn" id="clear-form" type="button" disabled>Clear</button></div>
+<p class="hint">Examples fill every field for you. Expand a section to review or change its values.</p><form id="traffic-form"><div class="progress" aria-live="polite"><strong>Feature values</strong><span id="progress">Loading fields…</span></div><div id="feature-fields"></div><div class="actions"><p>Predictions use the saved baseline ANN.</p><button class="btn btn-primary" id="detect-button" type="submit" disabled>Analyze traffic →</button></div></form></div></section>
+<aside class="side"><section class="panel" aria-live="polite"><div class="panel-head"><h2>Analysis result</h2><p class="muted">Your latest prediction appears here.</p></div><div class="content" id="result-content"><div class="result-placeholder"><div class="result-icon" aria-hidden="true">⌁</div><strong>Ready when you are</strong><p>Select an example or fill in the fields, then analyze the record.</p></div></div></section>
+<section class="panel"><div class="panel-head"><h2>About this model</h2><p class="muted">Paper baseline · NSL-KDD</p></div><div class="content"><div class="stats" id="model-information"></div><div class="notice">Research demonstration only. The model has not learned a reliable unknown-attack class; predictions are not a substitute for security monitoring.</div></div></section></aside></div><p class="footer">Examples are dataset records, not live network traffic.</p></main>
+<script>
+const form=document.getElementById('traffic-form'), fields=document.getElementById('feature-fields'), result=document.getElementById('result-content'), button=document.getElementById('detect-button'), progress=document.getElementById('progress');
+const binaryFields=new Set(['land','logged_in','root_shell','is_host_login','is_guest_login']);
+const groups=[['Connection',0,9],['Content & login activity',9,22],['Traffic patterns',22,31],['Destination host',31,41]];
+let metadata;
+function labelText(name){return name.replaceAll('_',' ')}
+function fieldFor(name){const label=document.createElement('label');label.className='field';const title=document.createElement('span');title.textContent=labelText(name);label.append(title);let input;
+ if(metadata.categorical_columns.includes(name)||binaryFields.has(name)||name==='su_attempted'){input=document.createElement('select');const placeholder=new Option('Select a value','');placeholder.disabled=true;placeholder.selected=true;input.add(placeholder);const options=metadata.categories[name]||(name==='su_attempted'?['0','1','2']:['0','1']);for(const val of options)input.add(new Option(binaryFields.has(name)?(val==='1'?'Yes (1)':'No (0)'):val,val));}
+ else{input=document.createElement('input');input.type='number';input.step='any';input.inputMode='decimal';input.placeholder='Enter a value';}input.name=name;input.required=true;label.append(input);return label;}
+function updateProgress(){const count=metadata.features.filter(n=>form.elements.namedItem(n).value!=='').length;progress.textContent=`${count} of ${metadata.features.length} completed`;}
+function showMessage(message,isError=false){result.replaceChildren();const p=document.createElement('p');p.className=isError?'result-status error':'muted';p.textContent=message;result.append(p)}
+function invalidateResult(){if(result.dataset.hasResult){showMessage('The record has changed. Analyze it again to update the result.');delete result.dataset.hasResult}}
+function loadExample(name){for(const [key,value] of Object.entries(metadata.examples[name]))form.elements.namedItem(key).value=String(value);updateProgress();showMessage(`Example loaded. Review the values or select Analyze traffic.`);delete result.dataset.hasResult;}
+async function initialize(){try{const response=await fetch('/metadata');const data=await response.json();if(!response.ok)throw Error(data.detail||'Unable to load model information.');metadata=data;
+ for(const [title,start,end] of groups){const section=document.createElement('details');section.className='group';if(start===0)section.open=true;const summary=document.createElement('summary');const heading=document.createElement('span');heading.textContent=title;const count=document.createElement('small');count.textContent=`${end-start} fields`;heading.append(count);summary.append(heading);section.append(summary);const grid=document.createElement('div');grid.className='feature-grid';for(const name of data.features.slice(start,end))grid.append(fieldFor(name));section.append(grid);fields.append(section)}
+ const modelInfo=document.getElementById('model-information');for(const [key,value] of [['Architecture',data.model_information.architecture],['Dataset',data.model_information.dataset],['Test accuracy',data.model_information.test_normal_vs_abnormal_accuracy],['Output','Normal / attack']]){const stat=document.createElement('div');stat.className='stat';const title=document.createElement('span');title.textContent=key;const detail=document.createElement('strong');detail.textContent=value;stat.append(title,detail);modelInfo.append(stat)}
+ for(const id of ['normal-example','attack-example','clear-form','detect-button'])document.getElementById(id).disabled=false;updateProgress();}catch(error){showMessage(error.message,true);progress.textContent='Unable to load fields';}}
+for(const name of ['normal','attack'])document.getElementById(`${name}-example`).addEventListener('click',()=>loadExample(name));document.getElementById('clear-form').addEventListener('click',()=>{form.reset();updateProgress();showMessage('Form cleared. Choose an example or enter values.');delete result.dataset.hasResult});form.addEventListener('input',()=>{updateProgress();invalidateResult()});form.addEventListener('change',()=>{updateProgress();invalidateResult()});
+form.addEventListener('invalid',event=>{const group=event.target.closest('details');if(group)group.open=true},true);
+form.addEventListener('submit',async event=>{event.preventDefault();button.disabled=true;button.textContent='Analyzing…';showMessage('Analyzing this record…');const payload={};for(const name of metadata.features){const input=form.elements.namedItem(name);payload[name]=metadata.categorical_columns.includes(name)?input.value:Number(input.value)}try{const response=await fetch('/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await response.json();if(!response.ok)throw Error(data.detail||'Prediction failed.');result.replaceChildren();const status=document.createElement('p');status.className=`result-status ${data.prediction}`;status.textContent=data.prediction==='normal'?'Normal traffic':'Attack detected';result.append(status);for(const [key,value] of [['Predicted class',data.predicted_class],['Model score',`${data.confidence_percent.toFixed(2)}%`]]){const row=document.createElement('p');row.className='result-detail';const title=document.createElement('span');title.textContent=key;const detail=document.createElement('strong');detail.textContent=value;row.append(title,detail);result.append(row)}const note=document.createElement('p');note.className='disclaimer';note.textContent='The model score is not a calibrated probability of correctness.';result.append(note);result.dataset.hasResult='true';}catch(error){showMessage(error.message,true)}finally{button.disabled=false;button.textContent='Analyze traffic →'}});initialize();
+</script></body></html>

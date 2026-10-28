@@ -63,7 +63,7 @@ Run commands from the project root using the Python executable in your environme
 .\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000` for the demo. The boosted training command overwrites `models/improved_binary_detector.joblib` and `results/improved_binary_results.json`. It does not overwrite baseline artifacts.
+Open `http://127.0.0.1:8000` for the demo. The boosted training command uses a group-aware training/validation split and overwrites `models/grouped_binary_detector.joblib` and `results/grouped_binary_results.json`. The earlier `improved_binary_*` artifacts and the baseline artifacts are preserved. See [results/MODEL_REVIEW.md](results/MODEL_REVIEW.md) for the new run and its limitations.
 
 To rerun the weighted ANN, first ensure the baseline preprocessing artifact exists, then run:
 
@@ -86,4 +86,4 @@ These commands overwrite the corresponding `proposed_` model and result files. T
 
 ## Next steps
 
-Use group-aware validation to keep identical feature vectors together; compare multiple seeds and simpler baselines; evaluate threshold stability, calibration and attack-family performance; and assess on independent representative traffic. Add input validation and connect the improved model to the demo only after the model has been suitably evaluated. The requested presentation is deferred until the user confirms.
+Repeat group-aware validation across splits and seeds; compare multiple seeds and simpler baselines; evaluate threshold stability, calibration and attack-family performance; and assess on independent representative traffic. Add input validation and connect the improved model to the demo only after the model has been suitably evaluated. The requested presentation is deferred until the user confirms.
