@@ -23,3 +23,6 @@ Thumbs.db
 
 # Presentation build files
 .pptx_build/
+# Outputs from historical ANN experiments
+legacy_ann/models/
+legacy_ann/results/

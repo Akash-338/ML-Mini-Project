@@ -36,14 +36,21 @@ def metadata():
     bundle = resources()
     encoder = bundle['model'].named_steps['columntransformer'].named_transformers_['category']
     categories = {name: [str(v) for v in values] for name, values in zip(CATEGORICAL_COLUMNS, encoder.categories_)}
-    sample = pd.read_csv(DATA_DIR / 'KDDTrain+.txt', header=None, names=NSL_KDD_COLUMNS, nrows=256)
-    examples = {}
-    for name, mask in [('normal', sample.label == 'normal'), ('attack', sample.label != 'normal')]:
-        matches = sample.loc[mask]
-        if matches.empty:
-            raise HTTPException(status_code=503, detail=f'No {name} example available.')
-        row = matches.iloc[0]
-        examples[name] = {c: str(row[c]) if c in CATEGORICAL_COLUMNS else float(row[c]) for c in FEATURE_COLUMNS}
+    test_path = DATA_DIR / 'KDDTest+.txt'
+    if not test_path.is_file():
+        raise HTTPException(status_code=503, detail='Test dataset required for examples is missing.')
+    sample = pd.read_csv(test_path, header=None, names=NSL_KDD_COLUMNS)
+    test_examples = {}
+    for label, records in sample.groupby('label', sort=True):
+        examples_for_label = []
+        for row_index, row in records.head(2).iterrows():
+            features = {c: str(row[c]) if c in CATEGORICAL_COLUMNS else float(row[c]) for c in FEATURE_COLUMNS}
+            examples_for_label.append({'row': int(row_index) + 1, 'features': features})
+        test_examples[str(label)] = examples_for_label
+    if 'normal' not in test_examples or len(test_examples) < 2:
+        raise HTTPException(status_code=503, detail='The test dataset must contain normal and attack examples.')
+    first_attack = next(label for label in test_examples if label != 'normal')
+    examples = {'normal': test_examples['normal'][0]['features'], 'attack': test_examples[first_attack][0]['features']}
     metrics_path = ROOT / 'results' / 'grouped_binary_results.json'
     accuracy = 'Unavailable'
     try:
@@ -53,7 +60,7 @@ def metadata():
     except (OSError, ValueError, KeyError, TypeError):
         pass
     return {'features': FEATURE_COLUMNS, 'categorical_columns': CATEGORICAL_COLUMNS,
-            'numerical_columns': NUMERICAL_COLUMNS, 'categories': categories, 'examples': examples,
+            'numerical_columns': NUMERICAL_COLUMNS, 'categories': categories, 'examples': examples, 'test_examples': test_examples,
             'model_information': {'architecture': 'Gradient-boosted trees', 'dataset': 'NSL-KDD',
                                   'test_normal_vs_abnormal_accuracy': accuracy}}
 

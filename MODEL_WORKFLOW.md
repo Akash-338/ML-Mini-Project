@@ -1,6 +1,6 @@
 # Model development and evaluation workflow
 
-This document describes the retained detector and the historical experiments. The current repository contains one deployable research-demo model: `models/grouped_binary_detector.joblib`. The baseline and weighted ANNs were removed from the current tree, but earlier code and outputs are available in Git history. The demo is not a production network monitoring system.
+This document describes the retained detector and the historical experiments. The current repository contains one deployable research-demo model: `models/grouped_binary_detector.joblib`. The historical baseline and weighted ANN source is restored in `legacy_ann/`; their earlier outputs remain available in Git history. The demo is not a production network monitoring system.
 
 ## 1. Define the task
 

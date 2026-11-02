@@ -1,6 +1,6 @@
 # Model comparison and why we used each model
 
-This document compares the paper-based baseline ANN with two alternative experiments on the supplied NSL-KDD data. The current application uses the **group-aware gradient-boosted binary detector**. The two ANN models and their code were removed during project cleanup, but their earlier outputs remain available in Git history.
+This document compares the paper-based baseline ANN with two alternative experiments on the supplied NSL-KDD data. The current application uses the **group-aware gradient-boosted binary detector**. The two historical ANN implementations are restored in `legacy_ann/`; their earlier outputs remain available in Git history.
 
 ## Results comparison
 

@@ -36,3 +36,15 @@ def test_displayed_accuracy_requires_matching_model_hash(monkeypatch, tmp_path):
     monkeypatch.setattr(app, 'ROOT', tmp_path)
     monkeypatch.setattr(app, 'DATA_DIR', Path(__file__).resolve().parents[1] / 'data')
     assert app.metadata()['model_information']['test_normal_vs_abnormal_accuracy'] == 'Unavailable'
+
+def test_test_examples_cover_labels_and_predict():
+    from src.preprocessing import FEATURE_COLUMNS, load_dataset_files
+    metadata = app.metadata()
+    _, test = load_dataset_files()
+    assert set(metadata['test_examples']) == set(test['label'])
+    for label, examples in metadata['test_examples'].items():
+        assert len(examples) == min(2, int((test['label'] == label).sum()))
+        for example in examples:
+            assert set(example['features']) == set(FEATURE_COLUMNS)
+            assert test.iloc[example['row'] - 1]['label'] == label
+            assert app.predict(example['features'])['prediction'] in {'normal', 'attack'}
